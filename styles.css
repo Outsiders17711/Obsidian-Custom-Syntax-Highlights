@@ -1,0 +1,34 @@
+/* Wrap TeX code blocks in Reading view */
+/* Increase specificity and force wrapping to override theme defaults */
+.markdown-reading-view pre code.language-tex,
+.markdown-reading-view pre.language-tex,
+.markdown-rendered pre code.language-tex {
+  white-space: pre-wrap !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Reduce extra space and disable pushers in our mode */
+.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-sizer {
+  min-height: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-pusher {
+  display: none !important;
+  height: 0 !important;
+}
+
+.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-section.tex-inline-rendered {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-section.tex-inline-rendered > pre {
+  margin-bottom: 0 !important;
+}
+
+/* Optional: keep copy button aligned when lines wrap */
+.markdown-reading-view pre.language-tex {
+  position: relative;
+}

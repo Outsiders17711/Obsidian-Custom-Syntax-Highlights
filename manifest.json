@@ -1,0 +1,11 @@
+{
+    "id": "latex-syntax-highlight",
+    "name": "LaTeX Syntax Highlight",
+    "version": "0.1.0",
+    "minAppVersion": "1.1.0",
+    "js": "main.js",
+    "css": "styles.css",
+    "description": "Apply syntax highlighting to LaTeX code blocks in Obsidian using Codemirror (for editing) and hacking the internal Markdown renderer for tex code blocks (for preview).",
+    "author": "Outsiders17711",
+    "isDesktopOnly": true
+}
