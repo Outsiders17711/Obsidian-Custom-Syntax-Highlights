@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- Updated release and test script logic so test vault has the current version number
+
 ### Security
 
 ## [0.3.0] - 2025-09-12

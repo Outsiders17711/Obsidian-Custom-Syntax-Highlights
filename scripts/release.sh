@@ -32,9 +32,9 @@ git pull origin main
 echo "📦 installing dependencies..."
 npm ci
 
-# run tests/build to ensure everything works
+# build to ensure everything works
 echo "🔨 building project..."
-npm run test  # update test vault (includes build)
+npm run build
 
 # bump version (this runs version-bump.mjs via postversion script)
 echo "🔢 bumping version ($BUMP_TYPE)..."
@@ -50,6 +50,10 @@ if [ "$MANIFEST_VERSION" != "$NEW_VERSION" ]; then
     echo "❌ error: manifest version ($MANIFEST_VERSION) does not match package version ($NEW_VERSION)"
     exit 1
 fi
+
+# update test vault with new version
+echo "🧪 updating test vault with new version..."
+npm run test
 
 # ensure tag exists (should be created by npm with no prefix due to .npmrc)
 if ! git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
