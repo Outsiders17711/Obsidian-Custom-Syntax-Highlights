@@ -4,7 +4,7 @@ import { cshSettingTab } from "./src/settings-tab";
 
 export default class cshPlugin extends Plugin {
   private processedSizers = new WeakSet<HTMLElement>();
-  settings: cshSettings;
+  settings!: cshSettings;
   private registeredExtensions = new Set<string>();
 
   async onload() {

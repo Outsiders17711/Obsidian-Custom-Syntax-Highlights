@@ -1,0 +1,25 @@
+# Obsidian Plugin Standard .gitignore
+
+# vscode
+.vscode 
+
+# Intellij
+*.iml
+.idea
+
+# npm
+node_modules
+package-lock.json
+
+# don't include the compiled main.js file in the repo.
+# they should be uploaded to github releases instead.
+main.js
+
+# exclude sourcemaps
+*.map
+
+# obsidian
+data.json
+
+# exclude macos finder (system explorer) view states
+.DS_Store

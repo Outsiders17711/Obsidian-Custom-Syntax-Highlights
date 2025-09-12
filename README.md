@@ -1,4 +1,8 @@
-# Custom File Extensions Plugin
+# Custom Syntax Highlights
+
+[![Release](https://img.shields.io/github/v/release/Outsiders17711/Obsidian-Custom-Syntax-Highlights)](https://github.com/Outsiders17711/Obsidian-Custom-Syntax-Highlights/releases)
+[![License](https://img.shields.io/github/license/Outsiders17711/Obsidian-Custom-Syntax-Highlights)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D16-brightgreen)](https://nodejs.org/)
 
 An Obsidian plugin that displays files with custom extensions as syntax-highlighted code blocks in reading view, with configurable extension-to-language mappings.
 
@@ -40,9 +44,16 @@ In the plugin settings, you can configure extension-to-language mappings:
 
 ## Installation
 
-1. Copy the plugin files to your vault's `.obsidian/plugins/custom-file-extensions/` directory
-2. Enable the plugin in Obsidian's Community Plugins settings
-3. Configure your desired extension mappings in the plugin settings
+### Manual Installation
+1. Download the latest release from [GitHub Releases](https://github.com/Outsiders17711/Obsidian-Custom-Syntax-Highlights/releases)
+2. Extract `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/custom-syntax-highlights/` directory
+3. Reload Obsidian and enable the plugin in Settings → Community plugins
+
+### Development Installation
+1. Clone this repo to your vault's `.obsidian/plugins/custom-syntax-highlights/` directory
+2. Run `npm install` to install dependencies
+3. Run `npm run dev` to start compilation in watch mode
+4. Enable the plugin in Obsidian settings
 
 ## Usage
 
@@ -60,9 +71,19 @@ This plugin was inspired by and built upon:
 
 ## Development
 
-- Build: `npm run build`
-- Dev (watch): `npm run dev`
-- The plugin requires Node.js and npm for building
+### Building
+- **Development**: `npm run dev` - starts watch mode for development
+- **Production**: `npm run build` - creates optimized build for release
+
+### Version Management
+- **Bump version**: `npm version patch|minor|major` - automatically updates manifest.json and versions.json
+- Requires Node.js 16+ and npm
+
+### Release Process
+1. Update `minAppVersion` in `manifest.json` if needed
+2. Run `npm version patch` (or `minor`/`major`)
+3. Create GitHub release with exact version number (no `v` prefix)
+4. Upload `main.js`, `manifest.json`, and `styles.css` as release assets
 
 ## License
 
