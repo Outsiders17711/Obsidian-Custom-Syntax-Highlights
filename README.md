@@ -15,22 +15,18 @@ An Obsidian plugin that displays files with custom extensions as syntax-highligh
 
 ## Demo
 
-<div style="display: flex; gap: 10px; align-items: flex-start;">
-<div style="flex: 1; text-align: center;">
+<p align="center">
+  On the left is <strong>Source Mode</strong>, and on the right is <strong>Reading Mode</strong>. Click either image to enlarge.
+</p>
 
-***Source Mode***
-[![Source Mode Demo](docs/demo-Source-Mode.png)](docs/demo-Source-Mode.png)
-*click to enlarge*
-
-</div>
-<div style="flex: 1; text-align: center;">
-
-***Reading Mode***
-[![Reading Mode Demo](docs/demo-Reading-Mode.png)](docs/demo-Reading-Mode.png)
-*click to enlarge*
-
-</div>
-</div>
+<p>
+  <a href="docs/demo-Source-Mode.png">    
+    <img src="docs/demo-Source-Mode.png" width="49%" alt="Source Mode" />
+  </a>
+  <a href="docs/demo-Reading-Mode.png">
+    <img src="docs/demo-Reading-Mode.png" width="49%" alt="Reading Mode" />
+  </a>
+</p>
 
 ## Installation
 
