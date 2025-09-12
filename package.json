@@ -21,6 +21,7 @@
     },
     "scripts": {
         "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs",
-        "dev": "node esbuild.config.mjs --watch"
+        "dev": "node esbuild.config.mjs --watch",
+        "test": "bash scripts/deploy-test.sh"
     }
 }

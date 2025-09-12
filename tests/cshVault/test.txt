@@ -1,0 +1,19 @@
+Custom Syntax Highlights Test
+============================
+
+Name: Custom Syntax Highlights Test
+Version: 1.0.0
+Description: A test JSON file to demonstrate custom syntax highlighting
+
+Features:
+- Syntax highlighting for custom file extensions
+- Auto-switch to reading view (configurable)
+- Configurable extension-language mappings
+
+Supported Extensions:
+- tex: LaTeX files
+- json: JSON configuration files
+- bib: Bibliography files
+- py: Python scripts
+- js: JavaScript files
+- yaml: YAML configuration files

@@ -1,0 +1,18 @@
+{
+    "name": "Custom Syntax Highlights Test",
+    "version": "1.0.0",
+    "description": "A test JSON file to demonstrate custom syntax highlighting",
+    "features": [
+        "Syntax highlighting for custom file extensions",
+        "Auto-switch to reading view (configurable)",
+        "Configurable extension-language mappings"
+    ],
+    "supported_extensions": {
+        "tex": "LaTeX files",
+        "json": "JSON configuration files",
+        "bib": "Bibliography files",
+        "py": "Python scripts",
+        "js": "JavaScript files",
+        "yaml": "YAML configuration files"
+    }
+}
