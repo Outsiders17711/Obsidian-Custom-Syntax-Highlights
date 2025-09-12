@@ -13,6 +13,25 @@ An Obsidian plugin that displays files with custom extensions as syntax-highligh
 - **Flexible Language Support**: Map extensions to any supported syntax highlighting language
 - **Clean Display**: Files are rendered as single, properly formatted code blocks
 
+## Demo
+
+<div style="display: flex; gap: 10px; align-items: flex-start;">
+<div style="flex: 1; text-align: center;">
+
+***Source Mode***
+[![Source Mode Demo](docs/demo-Source-Mode.png)](docs/demo-Source-Mode.png)
+*click to enlarge*
+
+</div>
+<div style="flex: 1; text-align: center;">
+
+***Reading Mode***
+[![Reading Mode Demo](docs/demo-Reading-Mode.png)](docs/demo-Reading-Mode.png)
+*click to enlarge*
+
+</div>
+</div>
+
 ## Installation
 
 ### From Community Plugins (Recommended)
@@ -35,12 +54,12 @@ Configure extension-to-language mappings in **Settings → Community plugins →
 ### Example Configurations
 
 | Extension | Language  | Result                                           |
-| --------- | --------- | ------------------------------------------------ |
+| --------- | :-------: | ------------------------------------------------ |
 | `tex`     | _(empty)_ | LaTeX files with TeX syntax highlighting         |
 | `json`    | _(empty)_ | JSON files with JSON syntax highlighting         |
-| `bib`     | `ini`     | Bibliography files with INI-style highlighting   |
+| `bib`     |   `ini`   | Bibliography files with INI-style highlighting   |
 | `py`      | `python`  | Python files with Python syntax highlighting     |
-| `txt`     | `md`      | Text files with normal editing (no highlighting) |
+| `txt`     |   `md`    | Text files with normal editing (no highlighting) |
 
 ### Important Notes
 
@@ -58,16 +77,17 @@ Configure extension-to-language mappings in **Settings → Community plugins →
 
 ### Building
 ```bash
-npm install          # install dependencies
-npm run dev          # development build with watch mode
-npm run build        # production build
+npm install    # install dependencies
+npm run dev    # development build with watch mode
+npm run build  # production build
+npm run test   # update the plugin in the test vault
 ```
 
 ### Release
 ```bash
-npm run release      # automated patch release
-npm run release:minor # minor version release  
-npm run release:major # major version release
+npm run release        # automated patch release
+npm run release:minor  # minor version release  
+npm run release:major  # major version release
 ```
 
 **Requirements**: Node.js 16+, Git repository with GitHub origin

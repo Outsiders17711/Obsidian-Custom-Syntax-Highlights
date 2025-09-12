@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Demo images for source/reading modes from extension-language combinations in test vault
+
 ### Changed
 ### Deprecated
 ### Removed
