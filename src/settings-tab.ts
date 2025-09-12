@@ -20,7 +20,7 @@ export class cshSettingTab extends PluginSettingTab {
       text: "Configure file extensions to display as syntax-highlighted code blocks in reading view." 
     });
 
-    // Auto-switch to reading view setting
+    // auto-switch to reading view setting
     new Setting(containerEl)
       .setName("Auto-switch to reading view")
       .setDesc("Automatically switch files with configured extensions to reading view when opened")
@@ -31,19 +31,24 @@ export class cshSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         }));
 
-    // Extension mappings header
+    // extension mappings header
     containerEl.createEl("h3", { text: "Extension Mappings" });
     
     containerEl.createEl("p", { 
       text: "Define which file extensions should be displayed with which syntax highlighting language. Leave language empty to use the extension name." 
     });
 
-    // Display existing mappings
+    const noteEl = containerEl.createEl("div", { cls: "setting-item-description" });
+    noteEl.createEl("strong", { text: "Note: " });
+    noteEl.appendText("The '.md' extension is not supported as it's handled natively by Obsidian. Set language to 'md' or 'markdown' for any non-native extension to allow normal editing and disable both syntax highlighting and auto-switch to reading view.");
+    noteEl.style.marginBottom = "20px";
+
+    // display existing mappings
     this.plugin.settings.extensionMappings.forEach((mapping, index) => {
       this.createMappingSetting(containerEl, mapping, index);
     });
 
-    // Add new mapping button
+    // add new mapping button
     new Setting(containerEl)
       .setName("Add new extension mapping")
       .setDesc("Add a new file extension to language mapping")
@@ -53,10 +58,10 @@ export class cshSettingTab extends PluginSettingTab {
         .onClick(async () => {
           this.plugin.settings.extensionMappings.push({ extension: "", language: "" });
           await this.plugin.saveSettings();
-          this.display(); // Refresh the settings display
+          this.display(); // refresh the settings display
         }));
 
-    // Examples section
+    // examples section
     containerEl.createEl("h4", { text: "Examples" });
     const exampleEl = containerEl.createEl("div", { cls: "csh-examples" });
     exampleEl.createEl("p", { text: "Common mappings:" });
@@ -65,6 +70,7 @@ export class cshSettingTab extends PluginSettingTab {
       "bib → ini",
       "py → python", 
       "js → javascript",
+      "txt → md (enable normal editing, disable syntax highlighting & auto-reading view)"
     ];
     
     const exampleList = exampleEl.createEl("ul");
@@ -84,7 +90,7 @@ export class cshSettingTab extends PluginSettingTab {
       .onChange(async (value) => {
         const validated = validateExtension(value);
         mapping.extension = validated;
-        text.setValue(validated); // Update display with validated value
+        text.setValue(validated); // update display with validated value
         await this.plugin.saveSettings();
         await this.plugin.refreshExtensionRegistrations();
       }));
@@ -104,7 +110,7 @@ export class cshSettingTab extends PluginSettingTab {
         this.plugin.settings.extensionMappings.splice(index, 1);
         await this.plugin.saveSettings();
         await this.plugin.refreshExtensionRegistrations();
-        this.display(); // Refresh the settings display
+        this.display(); // refresh the settings display
       }));
   }
 }

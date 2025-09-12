@@ -20,13 +20,19 @@ In the plugin settings, you can configure extension-to-language mappings:
 
 ### Examples
 
-| Extension | Language     | Result                                         |
-| --------- | ------------ | ---------------------------------------------- |
-| `tex`     | _(empty)_    | LaTeX files with TeX syntax highlighting       |
-| `json`    | _(empty)_    | JSON files with JSON syntax highlighting       |
-| `bib`     | `ini`        | Bibliography files with INI-style highlighting |
-| `py`      | `python`     | Python files with Python syntax highlighting   |
-| `js`      | `javascript` | JavaScript files with JavaScript highlighting  |
+| Extension | Language     | Result                                                                  |
+| --------- | ------------ | ----------------------------------------------------------------------- |
+| `tex`     | _(empty)_    | LaTeX files with TeX syntax highlighting                                |
+| `json`    | _(empty)_    | JSON files with JSON syntax highlighting                                |
+| `bib`     | `ini`        | Bibliography files with INI-style highlighting                          |
+| `py`      | `python`     | Python files with Python syntax highlighting                            |
+| `js`      | `javascript` | JavaScript files with JavaScript highlighting                           |
+| `txt`     | `md`         | Text files treated as markdown (normal editing, no syntax highlighting) |
+
+### Important Notes
+
+- **Markdown files (`.md`)**: Not supported as they're handled natively by Obsidian
+- **Enable normal editing**: Set the language to `md` or `markdown` for any non-native extension to allow normal editing and disable both syntax highlighting and auto-switch to reading view
 
 ### Settings
 
@@ -49,6 +55,8 @@ In the plugin settings, you can configure extension-to-language mappings:
 This plugin was inspired by and built upon:
 - [MeepTech/obsidian-custom-file-extensions-plugin](https://github.com/MeepTech/obsidian-custom-file-extensions-plugin)
 - The original LaTeX Syntax Highlight functionality
+
+**Note**: This plugin initially depended on the MeepTech plugin, which allows non-markdown files to be opened in Obsidian as text files. We then added syntax highlighting on top of that foundation. However, this plugin now implements the same file extension registration logic directly, making it a complete 2-in-1 solution - you no longer need the MeepTech plugin as a dependency.
 
 ## Development
 

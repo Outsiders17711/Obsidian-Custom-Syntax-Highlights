@@ -1,6 +1,6 @@
 export interface ExtensionMapping {
   extension: string;
-  language: string; // Leave empty to use extension name as language
+  language: string; // leave empty to use extension name as language
 }
 
 export interface cshSettings {
@@ -10,13 +10,20 @@ export interface cshSettings {
 
 export const DEFAULT_SETTINGS: cshSettings = {
   extensionMappings: [
-    { extension: "tex", language: "tex" }
+    { extension: "tex", language: "" },
+    { extension: "json", language: "" },
+    { extension: "yaml", language: "" },
+    { extension: "bib", language: "ini" },
+    { extension: "txt", language: "md" },
   ],
   autoSwitchToReading: true
 };
 
 export function validateExtension(ext: string): string {
-  return ext.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleaned = ext.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // don't allow 'md' extension as it's handled natively by obsidian
+  if (cleaned === 'md') return '';
+  return cleaned;
 }
 
 export function validateLanguage(lang: string): string {

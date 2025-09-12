@@ -10,17 +10,22 @@ export default class cshPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
     
-    // Add settings tab
+    // add settings tab
     this.addSettingTab(new cshSettingTab(this.app, this));
 
-    // Register extensions and set up event handlers
+    // register extensions and set up event handlers
     await this.refreshExtensionRegistrations();
 
-    // Set up file-open event handler for auto-switching to reading view
+    // set up file-open event handler for auto-switching to reading view
     this.registerEvent(this.app.workspace.on("file-open", (file) => {
       if (!this.settings.autoSwitchToReading) return;
       
       if (file instanceof TFile && this.isConfiguredExtension(file.extension)) {
+        // if language is set to 'md' or 'markdown', don't auto-switch to reading view
+        // this allows normal editing of the file as if it were a regular markdown file
+        const language = this.getLanguageForFile(file.path);
+        if (language === 'md' || language === 'markdown') return;
+        
         // find the leaf with this file and switch to reading view
         const leaves = this.app.workspace.getLeavesOfType("markdown");
         for (const leaf of leaves) {
@@ -42,6 +47,11 @@ export default class cshPlugin extends Plugin {
 
       const fileExtension = this.getFileExtension(path);
       if (!fileExtension || !this.isConfiguredExtension(fileExtension)) return;
+
+      // if language is set to 'md' or 'markdown', let obsidian handle it normally
+      // this allows the file to be opened/edited as a regular markdown file
+      const language = this.getLanguageForFile(path);
+      if (language === 'md' || language === 'markdown') return;
 
       const info = ctx.getSectionInfo?.(el as HTMLElement);
       if (!info) return;
@@ -149,6 +159,9 @@ export default class cshPlugin extends Plugin {
   }
 
   private isConfiguredExtension(extension: string): boolean {
+    // don't process .md files - leave those to obsidian
+    if (extension.toLowerCase() === 'md') return false;
+    
     return this.settings.extensionMappings.some(mapping => 
       mapping.extension.toLowerCase() === extension.toLowerCase()
     );
@@ -168,12 +181,12 @@ export default class cshPlugin extends Plugin {
   }
 
   async refreshExtensionRegistrations() {
-    // Get all configured extensions
+    // get all configured extensions (excluding 'md' which is handled by obsidian)
     const extensions = this.settings.extensionMappings
       .map(m => m.extension)
-      .filter(ext => ext.length > 0);
+      .filter(ext => ext.length > 0 && ext.toLowerCase() !== 'md');
 
-    // Register new extensions
+    // register new extensions
     for (const ext of extensions) {
       if (!this.registeredExtensions.has(ext)) {
         try {
@@ -186,7 +199,7 @@ export default class cshPlugin extends Plugin {
       }
     }
 
-    // Apply to currently open files
+    // apply to currently open files
     this.applyToAllOpen();
   }
 
@@ -198,6 +211,10 @@ export default class cshPlugin extends Plugin {
     for (const leaf of leaves) {
       const view = leaf.view as MarkdownView;
       if (view.file instanceof TFile && this.isConfiguredExtension(view.file.extension)) {
+        // don't auto-switch files with 'md' language - let them be edited normally
+        const language = this.getLanguageForFile(view.file.path);
+        if (language === 'md' || language === 'markdown') continue;
+        
         view.setState({ mode: "preview" }, { history: false });
       }
     }
@@ -209,6 +226,16 @@ export default class cshPlugin extends Plugin {
     // migration: clean up language fields that were set to 'text' when they should be empty
     // this fixes the bug where clearing language field resulted in 'text' instead of fallback to extension
     let needsMigration = false;
+    
+    // remove any 'md' extension mappings as they should be handled by obsidian
+    const originalLength = this.settings.extensionMappings.length;
+    this.settings.extensionMappings = this.settings.extensionMappings.filter(mapping => 
+      mapping.extension.toLowerCase() !== 'md'
+    );
+    if (this.settings.extensionMappings.length !== originalLength) {
+      needsMigration = true;
+    }
+    
     for (const mapping of this.settings.extensionMappings) {
       if (mapping.language === 'text' && mapping.extension !== 'text') {
         mapping.language = '';
