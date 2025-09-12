@@ -1,6 +1,6 @@
 {
     "name": "custom-syntax-highlights",
-    "version": "0.2.0",
+    "version": "0.1.0",
     "description": "Display files with custom extensions as syntax-highlighted code blocks in Obsidian reading view.",
     "main": "main.js",
     "engines": {
@@ -27,6 +27,10 @@
         "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
         "dev": "node esbuild.config.mjs",
         "version": "node version-bump.mjs && git add manifest.json versions.json",
-        "test": "bash scripts/deploy-test.sh"
+        "test": "bash scripts/test.sh",
+        "release": "bash scripts/release.sh",
+        "release:patch": "bash scripts/release.sh patch",
+        "release:minor": "bash scripts/release.sh minor",
+        "release:major": "bash scripts/release.sh major"
     }
 }

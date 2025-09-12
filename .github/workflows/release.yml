@@ -1,0 +1,72 @@
+name: Release Obsidian Plugin
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for version validation
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Validate manifest version matches tag
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix if present for comparison
+          CLEAN_TAG_VERSION=${TAG_VERSION#v}
+          MANIFEST_VERSION=$(node -p "require('./manifest.json').version")
+          if [ "$CLEAN_TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "Error: Tag version ($TAG_VERSION -> $CLEAN_TAG_VERSION) does not match manifest version ($MANIFEST_VERSION)"
+            exit 1
+          fi
+          echo "✅ Version validation passed: $CLEAN_TAG_VERSION"
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix for changelog lookup
+          CLEAN_VERSION=${TAG_VERSION#v}
+
+          # Extract changelog section for this version if it exists
+          CHANGELOG_SECTION=""
+          if [ -f "docs/CHANGELOG.md" ]; then
+            CHANGELOG_SECTION=$(awk "/^## \[$CLEAN_VERSION\]/ {flag=1; next} /^## \[/ && flag {exit} flag" docs/CHANGELOG.md || echo "")
+          fi
+
+          # Create release notes file
+          if [ -n "$CHANGELOG_SECTION" ]; then
+            echo "$CHANGELOG_SECTION" > release_notes.txt
+          else
+            cat > release_notes.txt << EOF
+          Release $TAG_VERSION
+
+          See the full changelog at: https://github.com/${{ github.repository }}/commits/$TAG_VERSION
+          EOF
+          fi
+
+          gh release create "$TAG_VERSION" \
+            --title "Release $TAG_VERSION" \
+            --notes-file release_notes.txt \
+            --target "$GITHUB_SHA" \
+            main.js \
+            manifest.json \
+            styles.css

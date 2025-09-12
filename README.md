@@ -13,77 +13,73 @@ An Obsidian plugin that displays files with custom extensions as syntax-highligh
 - **Flexible Language Support**: Map extensions to any supported syntax highlighting language
 - **Clean Display**: Files are rendered as single, properly formatted code blocks
 
-## Configuration
-
-### Extension Mappings
-
-In the plugin settings, you can configure extension-to-language mappings:
-
-- **Extension**: The file extension (without the dot)
-- **Language**: The syntax highlighting language to use (leave empty to use the extension name)
-
-### Examples
-
-| Extension | Language     | Result                                                                  |
-| --------- | ------------ | ----------------------------------------------------------------------- |
-| `tex`     | _(empty)_    | LaTeX files with TeX syntax highlighting                                |
-| `json`    | _(empty)_    | JSON files with JSON syntax highlighting                                |
-| `bib`     | `ini`        | Bibliography files with INI-style highlighting                          |
-| `py`      | `python`     | Python files with Python syntax highlighting                            |
-| `js`      | `javascript` | JavaScript files with JavaScript highlighting                           |
-| `txt`     | `md`         | Text files treated as markdown (normal editing, no syntax highlighting) |
-
-### Important Notes
-
-- **Markdown files (`.md`)**: Not supported as they're handled natively by Obsidian
-- **Enable normal editing**: Set the language to `md` or `markdown` for any non-native extension to allow normal editing and disable both syntax highlighting and auto-switch to reading view
-
-### Settings
-
-- **Auto-switch to reading view**: Toggle whether files with configured extensions should automatically open in reading view
-
 ## Installation
+
+### From Community Plugins (Recommended)
+*Coming soon - plugin is pending review for the official community plugin directory.*
 
 ### Manual Installation
 1. Download the latest release from [GitHub Releases](https://github.com/Outsiders17711/Obsidian-Custom-Syntax-Highlights/releases)
 2. Extract `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/custom-syntax-highlights/` directory
 3. Reload Obsidian and enable the plugin in Settings → Community plugins
 
-### Development Installation
-1. Clone this repo to your vault's `.obsidian/plugins/custom-syntax-highlights/` directory
-2. Run `npm install` to install dependencies
-3. Run `npm run dev` to start compilation in watch mode
-4. Enable the plugin in Obsidian settings
+## Configuration
+
+### Extension Mappings
+
+Configure extension-to-language mappings in **Settings → Community plugins → Custom File Extensions**:
+
+- **Extension**: The file extension (without the dot)
+- **Language**: The syntax highlighting language to use (leave empty to use the extension name)
+
+### Example Configurations
+
+| Extension | Language  | Result                                           |
+| --------- | --------- | ------------------------------------------------ |
+| `tex`     | _(empty)_ | LaTeX files with TeX syntax highlighting         |
+| `json`    | _(empty)_ | JSON files with JSON syntax highlighting         |
+| `bib`     | `ini`     | Bibliography files with INI-style highlighting   |
+| `py`      | `python`  | Python files with Python syntax highlighting     |
+| `txt`     | `md`      | Text files with normal editing (no highlighting) |
+
+### Important Notes
+
+- **Markdown files (`.md`)**: Not supported - handled natively by Obsidian
+- **Normal editing**: Set language to `md` or `markdown` to disable highlighting and enable normal editing
+- **Auto-switch**: Toggle whether files automatically open in reading view
 
 ## Usage
 
-1. Configure extension mappings in Settings → Community plugins → Custom File Extensions
+1. Configure extension mappings in plugin settings
 2. Open any file with a configured extension
-3. The file will automatically switch to reading view (if enabled) and display as a syntax-highlighted code block
-
-## Inspiration
-
-This plugin was inspired by and built upon:
-- [MeepTech/obsidian-custom-file-extensions-plugin](https://github.com/MeepTech/obsidian-custom-file-extensions-plugin)
-- The original LaTeX Syntax Highlight functionality
-
-**Note**: This plugin initially depended on the MeepTech plugin, which allows non-markdown files to be opened in Obsidian as text files. We then added syntax highlighting on top of that foundation. However, this plugin now implements the same file extension registration logic directly, making it a complete 2-in-1 solution - you no longer need the MeepTech plugin as a dependency.
+3. File automatically switches to reading view with syntax highlighting
 
 ## Development
 
 ### Building
-- **Development**: `npm run dev` - starts watch mode for development
-- **Production**: `npm run build` - creates optimized build for release
+```bash
+npm install          # install dependencies
+npm run dev          # development build with watch mode
+npm run build        # production build
+```
 
-### Version Management
-- **Bump version**: `npm version patch|minor|major` - automatically updates manifest.json and versions.json
-- Requires Node.js 16+ and npm
+### Release
+```bash
+npm run release      # automated patch release
+npm run release:minor # minor version release  
+npm run release:major # major version release
+```
 
-### Release Process
-1. Update `minAppVersion` in `manifest.json` if needed
-2. Run `npm version patch` (or `minor`/`major`)
-3. Create GitHub release with exact version number (no `v` prefix)
-4. Upload `main.js`, `manifest.json`, and `styles.css` as release assets
+**Requirements**: Node.js 16+, Git repository with GitHub origin
+
+## Documentation
+
+- **[Release Process](docs/RELEASE.md)** - Complete guide for maintainers
+- **[Changelog](docs/CHANGELOG.md)** - Version history and release notes
+
+## Inspiration
+
+Built upon the foundation of [MeepTech/obsidian-custom-file-extensions-plugin](https://github.com/MeepTech/obsidian-custom-file-extensions-plugin) for file extension registration. This plugin now implements a complete 2-in-1 solution with both file extension registration and syntax highlighting.
 
 ## License
 

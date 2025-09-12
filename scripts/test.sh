@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # deploy plugin to test vault
-echo "building plugin..."
-npm run build
+echo "building plugin in development mode..."
+npm run dev
 
 echo "creating plugin directory..."
 mkdir -p tests/cshVault/.obsidian/plugins/custom-syntax-highlights
