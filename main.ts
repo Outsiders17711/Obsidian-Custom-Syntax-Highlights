@@ -163,7 +163,8 @@ export default class cshPlugin extends Plugin {
     );
     
     if (!mapping) return 'text';
-    return mapping.language || extension;
+    // use the language if it's specified and not empty, otherwise fall back to extension
+    return (mapping.language && mapping.language.trim()) ? mapping.language : extension;
   }
 
   async refreshExtensionRegistrations() {
@@ -204,6 +205,20 @@ export default class cshPlugin extends Plugin {
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    
+    // migration: clean up language fields that were set to 'text' when they should be empty
+    // this fixes the bug where clearing language field resulted in 'text' instead of fallback to extension
+    let needsMigration = false;
+    for (const mapping of this.settings.extensionMappings) {
+      if (mapping.language === 'text' && mapping.extension !== 'text') {
+        mapping.language = '';
+        needsMigration = true;
+      }
+    }
+    
+    if (needsMigration) {
+      await this.saveSettings();
+    }
   }
 
   async saveSettings() {

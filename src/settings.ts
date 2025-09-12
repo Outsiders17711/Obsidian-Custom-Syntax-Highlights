@@ -1,6 +1,6 @@
 export interface ExtensionMapping {
   extension: string;
-  language: string;
+  language: string; // Leave empty to use extension name as language
 }
 
 export interface cshSettings {
@@ -20,5 +20,6 @@ export function validateExtension(ext: string): string {
 }
 
 export function validateLanguage(lang: string): string {
-  return lang.toLowerCase().trim() || 'text';
+  // return the trimmed language, empty string is valid (means use extension as language)
+  return lang.trim();
 }
