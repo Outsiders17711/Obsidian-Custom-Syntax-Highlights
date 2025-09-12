@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.2.3] - 2025-09-12
+- Fixed git tag format to match Obsidian plugin requirements (removed "v" prefix from tags)
+- Updated GitHub Actions workflow to handle tags without prefix
+
 ## [0.2.2] - 2025-09-12
 - Fixed GitHub release title format to match Obsidian plugin requirements (removed "Release" prefix)
 
