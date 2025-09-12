@@ -1,34 +1,51 @@
-/* Wrap TeX code blocks in Reading view */
-/* Increase specificity and force wrapping to override theme defaults */
-.markdown-reading-view pre code.language-tex,
-.markdown-reading-view pre.language-tex,
-.markdown-rendered pre code.language-tex {
+/* wrap code blocks in reading view for all supported extensions */
+.markdown-reading-view pre code,
+.markdown-reading-view pre {
   white-space: pre-wrap !important;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
-/* Reduce extra space and disable pushers in our mode */
-.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-sizer {
+/* reduce extra space in csh inline mode */
+.markdown-reading-view .markdown-preview-view.csh-mode .markdown-preview-sizer {
   min-height: 0 !important;
   padding-bottom: 0 !important;
 }
 
-.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-pusher {
+.markdown-reading-view .markdown-preview-view.csh-mode .markdown-preview-pusher {
   display: none !important;
   height: 0 !important;
 }
 
-.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-section.tex-inline-rendered {
+.markdown-reading-view .markdown-preview-view.csh-mode .markdown-preview-section.csh-rendered {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.markdown-reading-view .markdown-preview-view.tex-inline-mode .markdown-preview-section.tex-inline-rendered > pre {
+.markdown-reading-view .markdown-preview-view.csh-mode .markdown-preview-section.csh-rendered > pre {
   margin-bottom: 0 !important;
 }
 
-/* Optional: keep copy button aligned when lines wrap */
-.markdown-reading-view pre.language-tex {
+/* keep copy button aligned when lines wrap */
+.markdown-reading-view pre {
   position: relative;
+}
+
+/* settings tab styles */
+.csh-examples {
+  background: var(--background-secondary);
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.csh-examples ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.csh-examples li {
+  margin: 4px 0;
+  font-family: var(--font-monospace);
+  font-size: 0.9em;
 }

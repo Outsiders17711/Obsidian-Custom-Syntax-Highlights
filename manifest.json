@@ -1,9 +1,9 @@
 {
-    "id": "latex-syntax-highlight",
-    "name": "LaTeX Syntax Highlight",
-    "version": "0.1.0",
+    "id": "custom-syntax-highlights",
+    "name": "Custom Syntax Highlights",
+    "version": "0.2.0",
     "minAppVersion": "0.15.0",
-    "description": "Apply syntax highlighting to LaTeX code blocks in Obsidian using Codemirror (for editing) and hacking the internal Markdown renderer for tex code blocks (for preview).",
+    "description": "Display files with custom extensions as syntax-highlighted code blocks in reading view with configurable extension-to-language mappings.",
     "author": "Outsiders17711",
     "isDesktopOnly": true
 }

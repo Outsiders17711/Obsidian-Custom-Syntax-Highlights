@@ -1,48 +1,59 @@
-import { StreamLanguage, defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language";
-import { stex } from "@codemirror/legacy-modes/mode/stex";
-import { Compartment, StateEffect } from "@codemirror/state";
-import type { EditorView } from "@codemirror/view";
 import { MarkdownRenderChild, MarkdownRenderer, MarkdownView, Plugin, TFile } from "obsidian";
+import { cshSettings, DEFAULT_SETTINGS } from "./src/settings";
+import { cshSettingTab } from "./src/settings-tab";
 
-export default class TexInlineHighlight extends Plugin {
-  private lang = new Compartment();
+export default class cshPlugin extends Plugin {
   private processedSizers = new WeakSet<HTMLElement>();
+  settings: cshSettings;
+  private registeredExtensions = new Set<string>();
 
   async onload() {
-    // If another plugin already registered .tex, ignore the error gracefully
-    try {
-      // Open .tex files in the markdown editor (so we get a CM6 editor)
-      this.registerExtensions(["tex"], "markdown");
-    } catch (e) {
-      // noop: another plugin likely registered this mapping
-      // @ts-ignore
-      console.debug("latex-syntax-highlight: extension mapping already registered");
-    }
-    // create a compartment we can reconfigure per editor
-    this.registerEditorExtension(this.lang.of([]));
+    await this.loadSettings();
+    
+    // Add settings tab
+    this.addSettingTab(new cshSettingTab(this.app, this));
 
-    // whenever the active leaf changes, (re)apply latex if it's a .tex
-    this.registerEvent(this.app.workspace.on("active-leaf-change", () => this.applyToActive()));
-    // and when a file is opened in any leaf
-    this.registerEvent(this.app.workspace.on("file-open", () => this.applyToActive()));
+    // Register extensions and set up event handlers
+    await this.refreshExtensionRegistrations();
 
-    // Reading mode: Show only a single fenced `tex` block of the file
-    // Implementation: Replace content of all sections with the rendered code block, but keep sections visible for proper virtualization
+    // Set up file-open event handler for auto-switching to reading view
+    this.registerEvent(this.app.workspace.on("file-open", (file) => {
+      if (!this.settings.autoSwitchToReading) return;
+      
+      if (file instanceof TFile && this.isConfiguredExtension(file.extension)) {
+        // find the leaf with this file and switch to reading view
+        const leaves = this.app.workspace.getLeavesOfType("markdown");
+        for (const leaf of leaves) {
+          const view = leaf.view as MarkdownView;
+          if (view.file === file) {
+            // switch to reading view
+            view.setState({ mode: "preview" }, { history: false });
+            break;
+          }
+        }
+      }
+    }));
+
+    // reading mode: show only a single fenced code block of the file
+    // replace content of all sections with the rendered code block, but keep sections visible for proper virtualization
     this.registerMarkdownPostProcessor((el, ctx) => {
       const path = ctx.sourcePath?.toLowerCase();
-      if (!path || !path.endsWith(".tex")) return;
+      if (!path) return;
+
+      const fileExtension = this.getFileExtension(path);
+      if (!fileExtension || !this.isConfiguredExtension(fileExtension)) return;
 
       const info = ctx.getSectionInfo?.(el as HTMLElement);
       if (!info) return;
 
       const section = el as HTMLElement;
 
-      // For non-first sections, just hide their content but keep the section structure
+      // for non-first sections, just hide their content but keep the section structure
       if (info.lineStart !== 0) {
-        if (!section.classList.contains('tex-inline-hidden')) {
-          section.classList.add('tex-inline-hidden');
+        if (!section.classList.contains('csh-hidden')) {
+          section.classList.add('csh-hidden');
           while (section.firstChild) section.removeChild(section.firstChild);
-          // Keep minimal height to maintain scroll calculations
+          // keep minimal height to maintain scroll calculations
           section.style.height = "1px";
           section.style.minHeight = "1px";
           section.style.margin = "0";
@@ -52,16 +63,16 @@ export default class TexInlineHighlight extends Plugin {
         return;
       }
 
-      // First section: replace its contents once and render fenced tex
-      if (section.classList.contains('tex-inline-rendered')) return;
-      section.classList.add('tex-inline-rendered');
+      // first section: replace its contents once and render fenced code block
+      if (section.classList.contains('csh-rendered')) return;
+      section.classList.add('csh-rendered');
       
-      // Improve container styling for better layout
+      // improve container styling for better layout
       const sizer = section.parentElement as HTMLElement | null;
       const preview = section.closest('.markdown-preview-view') as HTMLElement | null;
-      preview?.classList.add('tex-inline-mode');
+      preview?.classList.add('csh-mode');
       
-      // Better sizer handling - don't remove pushers completely, just adjust their height
+      // better sizer handling - don't remove pushers completely, just adjust their height
       if (sizer && !this.processedSizers.has(sizer)) {
         this.processedSizers.add(sizer);
         const pushers = sizer.querySelectorAll('.markdown-preview-pusher');
@@ -70,17 +81,15 @@ export default class TexInlineHighlight extends Plugin {
           pusherEl.style.height = '0px';
           pusherEl.style.minHeight = '0px';
         });
-        sizer.style.paddingBottom = '8px'; // Small padding instead of 0
+        sizer.style.paddingBottom = '8px';
       }
       
-      // Clean section styling
       section.style.margin = "0";
-      section.style.padding = "8px 0"; // Small padding for readability
+      section.style.padding = "8px 0";
       while (section.firstChild) section.removeChild(section.firstChild);
 
       const child = new (class extends MarkdownRenderChild {
-        constructor(private plugin: TexInlineHighlight, containerEl: HTMLElement, private ctx: any) {
-          // @ts-ignore
+        constructor(private plugin: cshPlugin, containerEl: HTMLElement, private ctx: any) {
           super(containerEl);
         }
         async onload() {
@@ -88,21 +97,22 @@ export default class TexInlineHighlight extends Plugin {
             const file = this.plugin.app.vault.getAbstractFileByPath(this.ctx.sourcePath);
             if (!(file instanceof TFile)) return;
             const content = await this.plugin.app.vault.cachedRead(file);
-            const md = '```tex\n' + content + '\n```';
+            const language = this.plugin.getLanguageForFile(this.ctx.sourcePath);
+            const md = '```' + language + '\n' + content + '\n```';
             await MarkdownRenderer.render(this.plugin.app, md, this.containerEl, this.ctx.sourcePath, this.plugin);
           } catch (e) {
-            console.error('latex-syntax-highlight: reading render failed', e);
+            console.error('custom-syntax-highlights: reading render failed', e);
           }
         }
         onunload() {
-          // Cleanup mode class and sizer styles
+          // cleanup mode class and sizer styles
           const section = this.containerEl as HTMLElement;
           const preview = section.closest('.markdown-preview-view') as HTMLElement | null;
           const sizer = section.parentElement as HTMLElement | null;
-          preview?.classList?.remove('tex-inline-mode');
+          preview?.classList?.remove('csh-mode');
           if (sizer && this.plugin.processedSizers.has(sizer)) {
             this.plugin.processedSizers.delete(sizer);
-            // Restore pusher heights
+            // restore pusher heights
             const pushers = sizer.querySelectorAll('.markdown-preview-pusher');
             pushers.forEach((pusher) => {
               const pusherEl = pusher as HTMLElement;
@@ -111,11 +121,11 @@ export default class TexInlineHighlight extends Plugin {
             });
             sizer.style.paddingBottom = '';
           }
-          // Clean up hidden sections
-          const allSections = preview?.querySelectorAll('.tex-inline-hidden');
+          // clean up hidden sections
+          const allSections = preview?.querySelectorAll('.csh-hidden');
           allSections?.forEach((hiddenSection) => {
             const hiddenEl = hiddenSection as HTMLElement;
-            hiddenEl.classList.remove('tex-inline-hidden');
+            hiddenEl.classList.remove('csh-hidden');
             hiddenEl.style.height = '';
             hiddenEl.style.minHeight = '';
             hiddenEl.style.margin = '';
@@ -128,35 +138,75 @@ export default class TexInlineHighlight extends Plugin {
       ctx.addChild(child);
     });
 
-    // apply to all currently open markdown editors
+    // apply to all currently open files with configured extensions
     this.applyToAllOpen();
   }
 
-  private applyToActive() {
-    const leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-    if (leaf) this.applyToView(leaf);
+  private getFileExtension(path: string): string | null {
+    const lastDot = path.lastIndexOf('.');
+    if (lastDot === -1) return null;
+    return path.substring(lastDot + 1).toLowerCase();
+  }
+
+  private isConfiguredExtension(extension: string): boolean {
+    return this.settings.extensionMappings.some(mapping => 
+      mapping.extension.toLowerCase() === extension.toLowerCase()
+    );
+  }
+
+  private getLanguageForFile(path: string): string {
+    const extension = this.getFileExtension(path);
+    if (!extension) return 'text';
+    
+    const mapping = this.settings.extensionMappings.find(m => 
+      m.extension.toLowerCase() === extension.toLowerCase()
+    );
+    
+    if (!mapping) return 'text';
+    return mapping.language || extension;
+  }
+
+  async refreshExtensionRegistrations() {
+    // Get all configured extensions
+    const extensions = this.settings.extensionMappings
+      .map(m => m.extension)
+      .filter(ext => ext.length > 0);
+
+    // Register new extensions
+    for (const ext of extensions) {
+      if (!this.registeredExtensions.has(ext)) {
+        try {
+          this.registerExtensions([ext], "markdown");
+          this.registeredExtensions.add(ext);
+          console.debug(`custom-syntax-highlights: registered extension .${ext}`);
+        } catch (e) {
+          console.debug(`custom-syntax-highlights: extension .${ext} already registered by another plugin`);
+        }
+      }
+    }
+
+    // Apply to currently open files
+    this.applyToAllOpen();
   }
 
   private applyToAllOpen() {
+    if (!this.settings.autoSwitchToReading) return;
+    
+    // switch any currently open files with configured extensions to reading view
     const leaves = this.app.workspace.getLeavesOfType("markdown");
     for (const leaf of leaves) {
       const view = leaf.view as MarkdownView;
-      this.applyToView(view);
+      if (view.file instanceof TFile && this.isConfiguredExtension(view.file.extension)) {
+        view.setState({ mode: "preview" }, { history: false });
+      }
     }
   }
 
-  private applyToView(leaf: MarkdownView) {
-    const file = leaf.file;
-    const isTex = file instanceof TFile && file.extension.toLowerCase() === "tex";
-    // @ts-ignore private api but stable in practice
-    const view: EditorView | undefined = leaf?.editor?.cm;
-    if (!view) return;
-    if (!this.lang.get(view.state)) {
-      view.dispatch({ effects: StateEffect.appendConfig.of(this.lang.of([])) });
-    }
-    const ext = isTex
-      ? [StreamLanguage.define(stex), syntaxHighlighting(defaultHighlightStyle, { fallback: true })]
-      : [];
-    view.dispatch({ effects: this.lang.reconfigure(ext) });
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+
+  async saveSettings() {
+    await this.saveData(this.settings);
   }
 }
