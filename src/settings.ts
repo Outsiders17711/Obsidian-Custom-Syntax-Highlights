@@ -1,12 +1,7 @@
-export interface ExtensionMapping {
-  extension: string;
-  language: string; // leave empty to use extension name as language
-}
+import { ExtensionMapping, cshSettings } from "./types";
 
-export interface cshSettings {
-  extensionMappings: ExtensionMapping[];
-  autoSwitchToReading: boolean;
-}
+// re-export types for convenience
+export type { ExtensionMapping, cshSettings };
 
 export const DEFAULT_SETTINGS: cshSettings = {
   extensionMappings: [

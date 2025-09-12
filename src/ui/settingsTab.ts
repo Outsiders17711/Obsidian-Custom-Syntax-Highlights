@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import cshPlugin from "../main";
-import { ExtensionMapping, validateExtension, validateLanguage } from "./settings";
+import cshPlugin from "../../main";
+import { ExtensionMapping, validateExtension, validateLanguage } from "../settings";
 
 export class cshSettingTab extends PluginSettingTab {
   plugin: cshPlugin;
