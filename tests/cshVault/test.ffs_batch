@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FreeFileSync XmlType="BATCH" XmlFormat="23">
+    <Notes/>
+    <Compare>
+        <Variant>Content</Variant>
+        <Symlinks>Exclude</Symlinks>
+        <IgnoreTimeShift/>
+    </Compare>
+    <Synchronize>
+        <Changes>
+            <Left Create="right" Update="right" Delete="right"/>
+            <Right Create="left" Update="left" Delete="left"/>
+        </Changes>
+        <DeletionPolicy>Permanent</DeletionPolicy>
+        <VersioningFolder Style="Replace"/>
+    </Synchronize>
+    <Filter>
+        <Include>
+            <Item>*</Item>
+        </Include>
+        <Exclude>
+            <Item>\System Volume Information\</Item>
+            <Item>\$Recycle.Bin\</Item>
+            <Item>\RECYCLE?\</Item>
+            <Item>*\thumbs.db</Item>
+            <Item>*\.DS_Store</Item>
+            <Item>*\.git\</Item>
+            <Item>*\node_modules\</Item>
+            <Item>*\.obsidian\workspace.json</Item>
+            <Item>*\.obsidian\graph.json</Item>
+        </Exclude>
+        <SizeMin Unit="None">0</SizeMin>
+        <SizeMax Unit="None">0</SizeMax>
+        <TimeSpan Type="None">0</TimeSpan>
+    </Filter>
+    <FolderPairs>
+        <Pair>
+            <Left Threads="12">C:\Documents\Source</Left>
+            <Right Threads="12">C:\Documents\Backup</Right>
+            <Filter>
+                <Include>
+                    <Item>*</Item>
+                </Include>
+                <Exclude>
+                    <Item>*\.tmp</Item>
+                    <Item>*\temp\</Item>
+                </Exclude>
+                <SizeMin Unit="None">0</SizeMin>
+                <SizeMax Unit="None">0</SizeMax>
+                <TimeSpan Type="None">0</TimeSpan>
+            </Filter>
+        </Pair>
+        <Pair>
+            <Left Threads="12">C:\Projects\Development</Left>
+            <Right Threads="12">D:\Backup\Projects</Right>
+            <Filter>
+                <Include>
+                    <Item>*\.md</Item>
+                    <Item>*\.json</Item>
+                    <Item>*\.ts</Item>
+                    <Item>*\.js</Item>
+                </Include>
+                <Exclude/>
+                <SizeMin Unit="None">0</SizeMin>
+                <SizeMax Unit="None">0</SizeMax>
+                <TimeSpan Type="None">0</TimeSpan>
+            </Filter>
+        </Pair>
+    </FolderPairs>
+    <Errors Ignore="true" Retry="1" Delay="3"/>
+    <PostSyncCommand Condition="Completion"/>
+    <LogFolder/>
+    <EmailNotification Condition="Always"/>
+    <GridViewType>Difference</GridViewType>
+    <Batch>
+        <ProgressDialog Minimized="true" AutoClose="true"/>
+        <ErrorDialog>Cancel</ErrorDialog>
+        <PostSyncAction>None</PostSyncAction>
+    </Batch>
+</FreeFileSync>

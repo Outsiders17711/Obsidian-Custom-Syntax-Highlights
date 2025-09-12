@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.3.0] - 2025-09-12
+
+### Added
+- Improved extension validation to allow underscores in extension names
+- Test file `test.ffs_batch` for FreeFileSync config syntax highlighting
+- `.npmrc` configuration for clean version tags without prefix
+
+### Changed  
+- Enhanced release scripts with better error handling and version validation
+- Updated test script to use production build instead of development mode
+
 ## [0.2.3] - 2025-09-12
 - Fixed git tag format to match Obsidian plugin requirements (removed "v" prefix from tags)
 - Updated GitHub Actions workflow to handle tags without prefix

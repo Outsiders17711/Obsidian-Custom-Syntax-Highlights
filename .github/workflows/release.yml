@@ -12,50 +12,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full history for version validation
+          fetch-depth: 0 # full history for version validation
 
-      - name: Use Node.js
+      - name: use node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "npm"
 
-      - name: Install dependencies
+      - name: install dependencies
         run: npm ci
 
-      - name: Build plugin
+      - name: build plugin
         run: npm run build
 
-      - name: Validate manifest version matches tag
+      - name: validate manifest version matches tag
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/}
           MANIFEST_VERSION=$(node -p "require('./manifest.json').version")
           if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
-            echo "Error: Tag version ($TAG_VERSION) does not match manifest version ($MANIFEST_VERSION)"
+            echo "error: tag version ($TAG_VERSION) does not match manifest version ($MANIFEST_VERSION)"
             exit 1
           fi
-          echo "✅ Version validation passed: $TAG_VERSION"
+          echo "✅ version validation passed: $TAG_VERSION"
 
-      - name: Create release
+      - name: create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/}
 
-          # Extract changelog section for this version if it exists
+          # extract changelog section for this version if it exists
           CHANGELOG_SECTION=""
           if [ -f "docs/CHANGELOG.md" ]; then
             CHANGELOG_SECTION=$(awk "/^## \[$TAG_VERSION\]/ {flag=1; next} /^## \[/ && flag {exit} flag" docs/CHANGELOG.md || echo "")
           fi
 
-          # Create release notes file
+          # create release notes file
           if [ -n "$CHANGELOG_SECTION" ]; then
             echo "$CHANGELOG_SECTION" > release_notes.txt
           else
             cat > release_notes.txt << EOF
-          Release $TAG_VERSION
+          release $TAG_VERSION
 
-          See the full changelog at: https://github.com/${{ github.repository }}/commits/$TAG_VERSION
+          see the full changelog at: https://github.com/${{ github.repository }}/commits/$TAG_VERSION
           EOF
           fi
 

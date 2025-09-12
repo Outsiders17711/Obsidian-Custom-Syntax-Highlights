@@ -15,7 +15,7 @@ export const DEFAULT_SETTINGS: cshSettings = {
 };
 
 export function validateExtension(ext: string): string {
-  const cleaned = ext.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleaned = ext.toLowerCase().replace(/[^a-z0-9_]/g, '');
   // don't allow 'md' extension as it's handled natively by obsidian
   if (cleaned === 'md') return '';
   return cleaned;
