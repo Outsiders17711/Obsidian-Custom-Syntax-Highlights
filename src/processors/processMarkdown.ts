@@ -50,14 +50,8 @@ class SyntaxHighlightRenderChild extends MarkdownRenderChild {
     
     if (sizer && this.sizerManager.has(sizer)) {
       this.sizerManager.delete(sizer);
-      // restore pusher heights
-      const pushers = sizer.querySelectorAll('.markdown-preview-pusher');
-      pushers.forEach((pusher) => {
-        const pusherEl = pusher as HTMLElement;
-        pusherEl.style.height = '';
-        pusherEl.style.minHeight = '';
-      });
-      sizer.style.paddingBottom = '';
+      // revert sizer adjustments
+      sizer.classList.remove('csh-sizer-adjusted');
     }
     
     // clean up hidden sections
@@ -65,12 +59,10 @@ class SyntaxHighlightRenderChild extends MarkdownRenderChild {
     allSections?.forEach((hiddenSection) => {
       const hiddenEl = hiddenSection as HTMLElement;
       hiddenEl.classList.remove('csh-hidden');
-      hiddenEl.style.height = '';
-      hiddenEl.style.minHeight = '';
-      hiddenEl.style.margin = '';
-      hiddenEl.style.padding = '';
-      hiddenEl.style.visibility = '';
     });
+    
+    // clean up first section styling
+    section.classList.remove('csh-first-section');
   }
 }
 
@@ -115,12 +107,7 @@ function hideSection(section: HTMLElement) {
   if (!section.classList.contains('csh-hidden')) {
     section.classList.add('csh-hidden');
     while (section.firstChild) section.removeChild(section.firstChild);
-    // keep minimal height to maintain scroll calculations
-    section.style.height = "1px";
-    section.style.minHeight = "1px";
-    section.style.margin = "0";
-    section.style.padding = "0";
-    section.style.visibility = "hidden";
+    // keep minimal height to maintain scroll calculations - handled by CSS
   }
 }
 
@@ -133,16 +120,9 @@ function setupFirstSection(sizerManager: SizerManager, section: HTMLElement) {
   // better sizer handling - don't remove pushers completely, just adjust their height
   if (sizer && !sizerManager.has(sizer)) {
     sizerManager.add(sizer);
-    const pushers = sizer.querySelectorAll('.markdown-preview-pusher');
-    pushers.forEach((pusher) => {
-      const pusherEl = pusher as HTMLElement;
-      pusherEl.style.height = '0px';
-      pusherEl.style.minHeight = '0px';
-    });
-    sizer.style.paddingBottom = '8px';
+    sizer.classList.add('csh-sizer-adjusted');
   }
   
-  section.style.margin = "0";
-  section.style.padding = "8px 0";
+  section.classList.add('csh-first-section');
   while (section.firstChild) section.removeChild(section.firstChild);
 }

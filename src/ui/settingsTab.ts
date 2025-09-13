@@ -38,10 +38,9 @@ export class cshSettingTab extends PluginSettingTab {
       text: "Define which file extensions should be displayed with which syntax highlighting language. Leave language empty to use the extension name." 
     });
 
-    const noteEl = containerEl.createEl("div", { cls: "setting-item-description" });
+    const noteEl = containerEl.createEl("div", { cls: "setting-item-description csh-settings-note" });
     noteEl.createEl("strong", { text: "Note: " });
     noteEl.appendText("The '.md' extension is not supported as it's handled natively by Obsidian. Set language to 'md' or 'markdown' for any non-native extension to allow normal editing and disable both syntax highlighting and auto-switch to reading view.");
-    noteEl.style.marginBottom = "20px";
 
     // display existing mappings
     this.plugin.settings.extensionMappings.forEach((mapping, index) => {
@@ -63,7 +62,7 @@ export class cshSettingTab extends PluginSettingTab {
 
     // examples section
     containerEl.createEl("h4", { text: "Examples" });
-    const exampleEl = containerEl.createEl("div", { cls: "csh-examples" });
+    const exampleEl = containerEl.createEl("div", { cls: "csh-settings-examples" });
     exampleEl.createEl("p", { text: "Common mappings:" });
     const examples = [
       "json → json (or leave empty)",

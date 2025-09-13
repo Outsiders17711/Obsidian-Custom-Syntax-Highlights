@@ -6,15 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.4.0] - 2025-09-13
 
 ### Added
 - Demo images for source/reading modes from extension-language combinations in test vault
 
 ### Changed
-### Deprecated
-### Removed
+- Moved style assignments from JavaScript into CSS for easier compatibility with themes and snippets
+
 ### Fixed
 - Updated release and test script logic so test vault has the current version number
+- Addressed Obsidian plugin review feedback regarding JavaScript-assigned styles
 
 ### Security
 
