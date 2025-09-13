@@ -1,3 +1,4 @@
+/* --- Obsidian Reading Mode Styles --- */
 /* wrap code blocks in reading view for all supported extensions */
 .markdown-reading-view pre code,
 .markdown-reading-view pre {
@@ -31,21 +32,48 @@
   position: relative;
 }
 
-/* settings tab styles */
-.csh-examples {
+/* --- settingsTab.ts Styles --- */
+.csh-settings-examples {
   background: var(--background-secondary);
   padding: 12px;
   border-radius: 6px;
   margin-top: 8px;
 }
 
-.csh-examples ul {
+.csh-settings-examples ul {
   margin: 8px 0 0 0;
   padding-left: 20px;
 }
 
-.csh-examples li {
+.csh-settings-examples li {
   margin: 4px 0;
   font-family: var(--font-monospace);
   font-size: 0.9em;
+}
+
+.csh-settings-note {
+  margin-bottom: 20px !important;
+}
+
+/* --- processMarkdown.ts Styles --- */
+.csh-hidden {
+  height: 1px !important;
+  min-height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  visibility: hidden !important;
+}
+
+.csh-sizer-adjusted .markdown-preview-pusher {
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+.csh-sizer-adjusted {
+  padding-bottom: 8px !important;
+}
+
+.csh-first-section {
+  margin: 0 !important;
+  padding: 8px 0 !important;
 }
