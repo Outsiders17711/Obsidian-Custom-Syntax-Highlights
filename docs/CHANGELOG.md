@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- Updated release script to commit changes to the plugin in the test vault with new releases
+
 ### Security
 
 ## [0.4.0] - 2025-09-13

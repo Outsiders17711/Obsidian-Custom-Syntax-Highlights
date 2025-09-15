@@ -55,10 +55,21 @@ fi
 echo "🧪 updating test vault with new version..."
 npm run test
 
+# commit test vault changes
+echo "📝 committing test vault updates..."
+git add tests/cshVault/.obsidian/plugins/custom-syntax-highlights/
+if [ -n "$(git status --porcelain tests/cshVault/)" ]; then
+    git commit -m "update test vault to version $NEW_VERSION"
+else
+    echo "ℹ️ no test vault changes to commit"
+fi
+
 # ensure tag exists (should be created by npm with no prefix due to .npmrc)
 if ! git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
     echo "⚠️ warning: tag missing, creating annotated tag $NEW_VERSION"
     git tag -a "$NEW_VERSION" -m "$NEW_VERSION"
+else
+    echo "✅ tag $NEW_VERSION exists"
 fi
 
 # push changes and tags
