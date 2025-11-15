@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
+- Upgraded TypeScript to ^5.4.5 and upgraded other dependencies accordingly.
+- Installed ESLint as new devDependencies for improved linting and code quality.
+
 ### Deprecated
 ### Removed
 ### Fixed
