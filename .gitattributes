@@ -1,0 +1,23 @@
+*           text=auto
+
+# Scripts that must be LF on all OSes
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.py        text eol=lf
+*.rb        text eol=lf
+*.go        text eol=lf
+
+# Windows-native scripts that should be CRLF on checkout (still LF in repo)
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Binary files: never touch line endings
+*.png       -text
+*.jpg       -text
+*.jpeg      -text
+*.gif       -text
+*.pdf       -text
+*.zip       -text
+*.exe       -text
+*.dll       -text
