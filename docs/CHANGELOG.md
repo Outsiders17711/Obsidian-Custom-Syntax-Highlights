@@ -8,15 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
-- Upgraded TypeScript to ^5.4.5 and upgraded other dependencies accordingly.
-- Installed ESLint as new devDependencies for improved linting and code quality.
-
 ### Deprecated
 ### Removed
 ### Fixed
-- Updated release script to commit changes to the plugin in the test vault with new releases
-
 ### Security
+
+## [0.5.0] - 2025-11-15
+
+### Added
+- Installed ESLint as new devDependencies for improved linting and code quality.
+- Installed `globals` package to provide global type definitions for better TypeScript support.
+- Added `.gitattributes` to enforce consistent line endings.
+
+### Changed
+- Upgraded TypeScript to ^5.4.5 and upgraded other dependencies for compatibility with ESLint.
+
+### Removed
+- Removed `.eslintignore` file and moved ignore rules into `eslint.config.js`.
+
+### Fixed
+- Updated release script to commit changes to the plugin in the test vault with new releases
+- Resolved all ESLint errors to improve code quality and stability.
+- Refactored rendering logic to prevent potential memory leaks.
 
 ## [0.4.0] - 2025-09-13
 
@@ -29,8 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Updated release and test script logic so test vault has the current version number
 - Addressed Obsidian plugin review feedback regarding JavaScript-assigned styles
-
-### Security
 
 ## [0.3.0] - 2025-09-12
 
