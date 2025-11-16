@@ -44,22 +44,17 @@ echo -n "📥 pulling latest changes... "
 git pull origin main
 
 # install dependencies
-echo "📦 installing dependencies..."
+echo -n "📦 installing dependencies..."
 npm ci --silent
 
 # build to ensure everything works
-echo -n "🔨 building project... "
+echo "🔨 building project... "
 npm run build --silent
 
-# update test vault as part of release process
-echo "🧪 updating test vault..."
-npm run test:nobuild --silent
-git add tests/cshVault/.obsidian/plugins/$pluginID/
-
-# bump version (this runs version-bump.mjs via postversion script)
+# bump version in files only, without creating a git commit/tag yet
 echo -n "🔢 bumping version ($bumpType)... "
 currentVersion=$(node -p "require('./package.json').version")
-npm version "$bumpType" --message "release: %s"
+npm version "$bumpType" --no-git-tag-version --message "release: %s" --silent
 
 # get the new version; assert it matches manifest
 newVersion=$(node -p "require('./package.json').version")
@@ -71,17 +66,22 @@ if [ "$manifestVersion" != "$newVersion" ]; then
     exit 1
 fi
 
-# ensure tag exists (should be created by npm with no prefix due to .npmrc)
-if ! git rev-parse "$newVersion" >/dev/null 2>&1; then
-    echo "⚠️ warning: tag missing; creating annotated tag $newVersion"
-    git tag -a "$newVersion" -m "$newVersion"
-fi
+# update test vault with the final build artifacts
+echo -n "🧪 updating test vault..."
+npm run test --silent
 
-# push changes and tags
-echo "📤 pushing changes and tag $newVersion..."
-git push origin main --follow-tags
+# stage all changed files and create the release commit
+echo -n "📝 creating release commit and tag $newVersion... "
+git add .
+git commit -m "release: $newVersion"
+git tag -a "$newVersion" -m "$newVersion"
 
-echo -n "🎉 release $newVersion initiated! "
+# push changes and tags to remote
+echo "📤 pushing changes..."
+git push origin main
+git push origin "$newVersion"
+
+echo -n "🎉 release $newVersion initiated!"
 echo "📋 github actions will automatically:"
 echo " >> build the plugin >> create a github release >> upload {main.js, manifest.json, styles.css}"
 echo "🔗 check the release at: https://github.com/$(git config --get remote.origin.url | sed 's/.*github.com[:/]\([^.]*\).*/\1/')/releases"

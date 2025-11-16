@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 
+## [0.5.3] - 2025-11-16
+
+### Fixed
+- Make sure to push only the new tag created during release process.
+- Fix test vault update during release to use correct version number.
+
 ## [0.5.2] - 2025-11-16
 
 ### Changed
