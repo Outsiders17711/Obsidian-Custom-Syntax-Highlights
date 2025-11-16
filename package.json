@@ -28,12 +28,12 @@
         "@codemirror/legacy-modes": "^6.0.0"
     },
     "scripts": {
-        "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-        "dev": "node esbuild.config.mjs",
+        "build": "tsc -noEmit -skipLibCheck -p config/tsconfig.json && node config/esbuild.config.mjs production",
+        "dev": "node config/esbuild.config.mjs",
         "version": "node version-bump.mjs && git add manifest.json versions.json",
-        "lint": "eslint \"**/*.ts\"",
-        "lint:fix": "eslint \"**/*.ts\" --fix",
-        "lint:check": "eslint \"**/*.ts\" --max-warnings 0",
+        "lint": "eslint \"**/*.ts\" -c config/eslint.config.js",
+        "lint:fix": "eslint \"**/*.ts\" -c config/eslint.config.js --fix",
+        "lint:check": "eslint \"**/*.ts\" -c config/eslint.config.js --max-warnings 0",
         "test": "bash scripts/test.sh",
         "test:nobuild": "bash scripts/test.sh nobuild",
         "release:patch": "bash scripts/release.sh patch",

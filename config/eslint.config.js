@@ -18,7 +18,7 @@ export default defineConfig([
                 ...globals.node,
             },
             parser: tsparser,
-            parserOptions: { project: "./tsconfig.json" },
+            parserOptions: { project: "./config/tsconfig.json" },
         },
 
         // you can add your own configuration to override or add rules
