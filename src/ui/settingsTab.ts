@@ -72,7 +72,7 @@ export class cshSettingTab extends PluginSettingTab {
       .setHeading()
       .settingEl.addClass("csh-h2");
     const exampleEl = containerEl.createEl("div", { cls: "csh-settings-examples" });
-    exampleEl.createEl("p", { text: "Common Mappings:" });
+    exampleEl.createEl("p", { text: "Common mappings:" });
     const examples = [
       "json → json (or leave empty)",
       "bib → ini",
@@ -100,7 +100,7 @@ export class cshSettingTab extends PluginSettingTab {
         mapping.extension = validated;
         text.setValue(validated); // update display with validated value
         await this.plugin.saveSettings();
-        await this.plugin.refreshExtensionRegistrations();
+        this.plugin.refreshExtensionRegistrations();
       }));
 
     setting.addText(text => text
@@ -117,7 +117,7 @@ export class cshSettingTab extends PluginSettingTab {
       .onClick(async () => {
         this.plugin.settings.extensionMappings.splice(index, 1);
         await this.plugin.saveSettings();
-        await this.plugin.refreshExtensionRegistrations();
+        this.plugin.refreshExtensionRegistrations();
         this.display(); // refresh the settings display
       }));
   }

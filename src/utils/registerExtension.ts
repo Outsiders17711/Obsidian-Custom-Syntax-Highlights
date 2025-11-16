@@ -10,7 +10,7 @@ export class ExtensionRegistrationManager {
 
   constructor(private plugin: Plugin) { }
 
-  async refreshExtensionRegistrations(settings: cshSettings) {
+  refreshExtensionRegistrations(settings: cshSettings) {
     const extensions = getConfiguredExtensions(settings);
 
     // register new extensions

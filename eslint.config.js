@@ -28,6 +28,7 @@ export default defineConfig([
             // example: add a rule not in the recommended set and set its severity
             // this rule enforces using the obsidian filemanager to trash files
             "obsidianmd/prefer-file-manager-trash-file": "error",
+            "@typescript-eslint/require-await": "error",
         },
     },
 ]);
