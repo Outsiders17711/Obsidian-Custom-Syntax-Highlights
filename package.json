@@ -1,6 +1,6 @@
 {
     "name": "custom-syntax-highlights",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Display files with custom extensions as syntax-highlighted code blocks in Obsidian reading view.",
     "main": "main.js",
     "type": "module",
