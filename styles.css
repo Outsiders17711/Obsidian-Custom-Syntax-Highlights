@@ -77,3 +77,25 @@
   margin: 0 !important;
   padding: 8px 0 !important;
 }
+
+/* add custom heading styles for settings tab */
+.csh-h2 .setting-item-name {
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line-height);
+  color: var(--h2-color);
+}
+
+.csh-h3 .setting-item-name {
+  font-size: var(--h3-size);
+  font-weight: var(--h3-weight);
+  line-height: var(--h3-line-height);
+  color: var(--h3-color);
+}
+
+.csh-h4 .setting-item-name {
+  font-size: var(--h4-size);
+  font-weight: var(--h4-weight);
+  line-height: var(--h4-line-height);
+  color: var(--h4-color);
+}

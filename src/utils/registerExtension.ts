@@ -8,7 +8,7 @@ import { getConfiguredExtensions } from "./extension";
 export class ExtensionRegistrationManager {
   private registeredExtensions = new Set<string>();
 
-  constructor(private plugin: Plugin) {}
+  constructor(private plugin: Plugin) { }
 
   async refreshExtensionRegistrations(settings: cshSettings) {
     const extensions = getConfiguredExtensions(settings);
@@ -20,7 +20,7 @@ export class ExtensionRegistrationManager {
           this.plugin.registerExtensions([ext], "markdown");
           this.registeredExtensions.add(ext);
           console.debug(`custom-syntax-highlights: registered extension .${ext}`);
-        } catch (e) {
+        } catch {
           console.debug(`custom-syntax-highlights: extension .${ext} already registered by another plugin`);
         }
       }

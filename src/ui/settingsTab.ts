@@ -14,10 +14,13 @@ export class cshSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Custom File Extensions Settings" });
+    new Setting(containerEl)
+      .setName("Custom file extensions")
+      .setHeading()
+      .settingEl.addClass("csh-h2");
 
-    containerEl.createEl("p", { 
-      text: "Configure file extensions to display as syntax-highlighted code blocks in reading view." 
+    containerEl.createEl("p", {
+      text: "Configure file extensions to display as syntax-highlighted code blocks in reading view."
     });
 
     // auto-switch to reading view setting
@@ -32,10 +35,13 @@ export class cshSettingTab extends PluginSettingTab {
         }));
 
     // extension mappings header
-    containerEl.createEl("h3", { text: "Extension Mappings" });
-    
-    containerEl.createEl("p", { 
-      text: "Define which file extensions should be displayed with which syntax highlighting language. Leave language empty to use the extension name." 
+    new Setting(containerEl)
+      .setName("Extension mappings")
+      .setHeading()
+      .settingEl.addClass("csh-h2");
+
+    containerEl.createEl("p", {
+      text: "Define which file extensions should be displayed with which syntax highlighting language. Leave language empty to use the extension name."
     });
 
     const noteEl = containerEl.createEl("div", { cls: "setting-item-description csh-settings-note" });
@@ -61,17 +67,20 @@ export class cshSettingTab extends PluginSettingTab {
         }));
 
     // examples section
-    containerEl.createEl("h4", { text: "Examples" });
+    new Setting(containerEl)
+      .setName("Examples")
+      .setHeading()
+      .settingEl.addClass("csh-h2");
     const exampleEl = containerEl.createEl("div", { cls: "csh-settings-examples" });
-    exampleEl.createEl("p", { text: "Common mappings:" });
+    exampleEl.createEl("p", { text: "Common Mappings:" });
     const examples = [
       "json → json (or leave empty)",
       "bib → ini",
-      "py → python", 
+      "py → python",
       "js → javascript",
       "txt → md (enable normal editing, disable syntax highlighting & auto-reading view)"
     ];
-    
+
     const exampleList = exampleEl.createEl("ul");
     examples.forEach(example => {
       exampleList.createEl("li", { text: example });
@@ -84,7 +93,7 @@ export class cshSettingTab extends PluginSettingTab {
       .setDesc("File extension and corresponding syntax highlighting language");
 
     setting.addText(text => text
-      .setPlaceholder("Extension (e.g., tex, json, bib)")
+      .setPlaceholder("file extension (`tex`, `json`, `bib`)")
       .setValue(mapping.extension)
       .onChange(async (value) => {
         const validated = validateExtension(value);
@@ -95,7 +104,7 @@ export class cshSettingTab extends PluginSettingTab {
       }));
 
     setting.addText(text => text
-      .setPlaceholder("Language (e.g., tex, json, ini) - leave empty to use extension")
+      .setPlaceholder("syntax language (`tex`, `json`, `ini`) - leave empty to use extension")
       .setValue(mapping.language)
       .onChange(async (value) => {
         mapping.language = validateLanguage(value);

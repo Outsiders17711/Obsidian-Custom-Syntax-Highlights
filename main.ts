@@ -45,8 +45,12 @@ export default class cshPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    
+    this.settings = Object.assign(
+      {}, 
+      DEFAULT_SETTINGS, 
+      await this.loadData() as cshSettings
+    );
+
     // migration: clean up language fields that were set to 'text' when they should be empty
     // this fixes the bug where clearing language field resulted in 'text' instead of fallback to extension
     let needsMigration = false;
