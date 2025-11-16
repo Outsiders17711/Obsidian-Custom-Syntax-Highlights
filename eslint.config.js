@@ -2,6 +2,7 @@
 import tsparser from "@typescript-eslint/parser";
 import obsidianmd from "eslint-plugin-obsidianmd";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
 
 export default defineConfig([
     // global ignores
@@ -12,6 +13,10 @@ export default defineConfig([
     {
         files: ["**/*.ts"],
         languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.node,
+            },
             parser: tsparser,
             parserOptions: { project: "./tsconfig.json" },
         },
