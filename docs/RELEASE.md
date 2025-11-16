@@ -4,7 +4,7 @@
 
 ```bash
 # Patch release (0.1.0 → 0.1.1)
-npm run release
+npm run release:patch
 
 # Minor release (0.1.0 → 0.2.0)  
 npm run release:minor
@@ -15,34 +15,26 @@ npm run release:major
 
 ## What Happens Automatically
 
-1. **Pre-checks**
-   - Validates on main branch
-   - Ensures clean working directory
-   - Pulls latest changes
+1. **Checks**
+   - Verifies the release is running on the `main` branch.
+   - Ensures the working directory is clean (no uncommitted changes).
+   - Runs strict lint checks to prevent warnings or errors.
+   - Pulls the latest changes from the remote `main` branch.
 
-2. **Build & Test**
-   - Installs dependencies (`npm ci`)
-   - Builds plugin (`npm run build`)
-   - Validates TypeScript compilation
+2. **Build & Stage**
+   - Installs exact dependencies with `npm ci`.
+   - Builds the plugin and generates production files.
+   - Copies the new build files into the test vault.
+   - Stages the test vault updates for the release commit.
 
-3. **Version Management**
-   - Bumps version in `package.json`
-   - Updates `manifest.json` via `version-bump.mjs`
-   - Updates `versions.json` with compatibility info
-   - Creates git commit with version changes
+3. **Version & Commit**
+   - Bumps the version in `package.json`, `manifest.json`, and `versions.json`.
+   - Commits all staged changes with a `release: <version>` message.
+   - Creates a git tag for the new version (e.g., `0.6.0`).
 
-4. **Git Operations**
-   - Pushes changes to main branch
-   - Creates and pushes version tag (e.g., `v0.1.1`)
-
-5. **GitHub Release** (via Actions)
-   - Validates tag version matches manifest (handles 'v' prefix)
-   - Extracts changelog section for release notes
-   - Creates GitHub release with proper formatting
-   - Uploads required Obsidian plugin files:
-     - `main.js` (bundled plugin code)
-     - `manifest.json` (plugin metadata)
-     - `styles.css` (plugin styles)
+4. **Push & Deploy**
+   - Pushes the release commit and the new tag to the remote repository.
+   - Triggers a GitHub Action that builds and uploads release assets.
 
 ## Manual Release Alternative
 

@@ -1,85 +1,87 @@
 #!/bin/bash
 
-# Release script for Obsidian Custom Syntax Highlights plugin
-# Usage: ./scripts/release.sh [patch|minor|major]
+# release script for obsidian custom syntax highlights plugin
+# usage: ./scripts/release.sh [patch|minor|major]
+# usage: npm run release:patch|minor|major
 
-set -e
+set -e  # exit on error
 
-# Default to patch if no argument provided
-BUMP_TYPE=${1:-patch}
+# check if a bump type is provided
+if [ -z "$1" ]; then
+    echo "❌ error: no release type specified; usage: $0 [patch|minor|major]"
+    exit 1
+fi
+bumpType=$1
 
-echo "🚀 starting release process..."
+# get plugin id from manifest.json
+pluginID=$(node -p "require('./manifest.json').id")
+echo "🚀 starting $bumpType release process for $pluginID..."
 
 # check if we're on main branch
-CURRENT_BRANCH=$(git branch --show-current)
-if [ "$CURRENT_BRANCH" != "main" ]; then
-    echo "❌ error: must be on main branch to release. currently on: $CURRENT_BRANCH"
+gitBranch=$(git branch --show-current)
+if [ "$gitBranch" != "main" ]; then
+    echo "❌ error: must be on main branch to release; currently on: $gitBranch"
     exit 1
 fi
 
 # check if working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
-    echo "❌ error: working directory is not clean. please commit or stash changes."
+    echo "❌ error: working directory is not clean; please commit or stash changes."
     git status --short
     exit 1
 fi
 
+# run strict lint checks before releasing
+echo -n "🔍 running lint checks... "
+if ! npm run lint:check >/dev/null 2>&1; then
+    echo ""
+    echo "❌ error: linting failed; please run 'npm run lint' to see errors."
+    exit 1
+fi
+
 # pull latest changes
-echo "📥 pulling latest changes..."
+echo -n "📥 pulling latest changes... "
 git pull origin main
 
 # install dependencies
 echo "📦 installing dependencies..."
-npm ci
+npm ci --silent
 
 # build to ensure everything works
-echo "🔨 building project..."
-npm run build
+echo -n "🔨 building project... "
+npm run build --silent
+
+# update test vault as part of release process
+echo "🧪 updating test vault..."
+npm run test:nobuild --silent
+git add tests/cshVault/.obsidian/plugins/$pluginID/
 
 # bump version (this runs version-bump.mjs via postversion script)
-echo "🔢 bumping version ($BUMP_TYPE)..."
-CURRENT_VERSION=$(node -p "require('./package.json').version")
-npm version "$BUMP_TYPE" --message "release: %s"
+echo -n "🔢 bumping version ($bumpType)... "
+currentVersion=$(node -p "require('./package.json').version")
+npm version "$bumpType" --message "release: %s"
 
-# Get the new version
-NEW_VERSION=$(node -p "require('./package.json').version")
-echo "✅ version bumped: $CURRENT_VERSION -> $NEW_VERSION"
+# get the new version; assert it matches manifest
+newVersion=$(node -p "require('./package.json').version")
+echo "✅ version bumped: $currentVersion -> $newVersion"
 
-MANIFEST_VERSION=$(node -p "require('./manifest.json').version")
-if [ "$MANIFEST_VERSION" != "$NEW_VERSION" ]; then
-    echo "❌ error: manifest version ($MANIFEST_VERSION) does not match package version ($NEW_VERSION)"
+manifestVersion=$(node -p "require('./manifest.json').version")
+if [ "$manifestVersion" != "$newVersion" ]; then
+    echo "❌ error: manifest version ($manifestVersion) does not match package version ($newVersion)"
     exit 1
 fi
 
-# update test vault with new version
-echo "🧪 updating test vault with new version..."
-npm run test
-
-# commit test vault changes
-echo "📝 committing test vault updates..."
-git add tests/cshVault/.obsidian/plugins/custom-syntax-highlights/
-if [ -n "$(git status --porcelain tests/cshVault/)" ]; then
-    git commit -m "update test vault to version $NEW_VERSION"
-else
-    echo "ℹ️ no test vault changes to commit"
-fi
-
 # ensure tag exists (should be created by npm with no prefix due to .npmrc)
-if ! git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
-    echo "⚠️ warning: tag missing, creating annotated tag $NEW_VERSION"
-    git tag -a "$NEW_VERSION" -m "$NEW_VERSION"
-else
-    echo "✅ tag $NEW_VERSION exists"
+if ! git rev-parse "$newVersion" >/dev/null 2>&1; then
+    echo "⚠️ warning: tag missing; creating annotated tag $newVersion"
+    git tag -a "$newVersion" -m "$newVersion"
 fi
 
 # push changes and tags
-echo "📤 pushing changes and tag $NEW_VERSION..."
+echo "📤 pushing changes and tag $newVersion..."
 git push origin main --follow-tags
 
-echo "🎉 release $NEW_VERSION initiated!"
+echo -n "🎉 release $newVersion initiated! "
 echo "📋 github actions will automatically:"
-echo "   - build the plugin"
-echo "   - create a github release"
-echo "   - upload main.js, manifest.json, and styles.css"
-echo ""
+echo " >> build the plugin >> create a github release >> upload {main.js, manifest.json, styles.css}"
 echo "🔗 check the release at: https://github.com/$(git config --get remote.origin.url | sed 's/.*github.com[:/]\([^.]*\).*/\1/')/releases"

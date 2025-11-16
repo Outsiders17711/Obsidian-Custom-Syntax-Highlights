@@ -8,10 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
-### Deprecated
 ### Removed
 ### Fixed
-### Security
+
+## [0.5.2] - 2025-11-16
+
+### Changed
+- Updated test script for robustness; now builds plugin before testing by default.
+- Updated release script for robustness; now requires explicit release type argument, runs lint checks before releasing and updates test vault as part of release process.
+- Updated `package.json` scripts and documentation to reflect changes in test and release scripts.
+
+## [0.5.1] - 2025-11-16
+
+### Fixed
+- Resolved ESLint errors flagged by Obsidian plugin review.
+- Removed async from method where unnecessary to comply with linting rules.
 
 ## [0.5.0] - 2025-11-15
 
