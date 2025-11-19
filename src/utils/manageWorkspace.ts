@@ -19,11 +19,13 @@ export function setupFileOpenHandler(workspace: Workspace, settings: cshSettings
       // find the leaf with this file and switch to reading view
       const leaves = workspace.getLeavesOfType("markdown");
       for (const leaf of leaves) {
-        const view = leaf.view as MarkdownView;
-        if (view.file === file) {
-          // switch to reading view
-          void view.setState({ mode: "preview" }, { history: false });
-          break;
+        if (leaf.view instanceof MarkdownView) {
+          const view = leaf.view;
+          if (view.file === file) {
+            // switch to reading view
+            void view.setState({ mode: "preview" }, { history: false });
+            break;
+          }
         }
       }
     }
@@ -36,13 +38,15 @@ export function applyToAllOpenFiles(workspace: Workspace, settings: cshSettings)
   // switch any currently open files with configured extensions to reading view
   const leaves = workspace.getLeavesOfType("markdown");
   for (const leaf of leaves) {
-    const view = leaf.view as MarkdownView;
-    if (view.file instanceof TFile && isConfiguredExtension(view.file.extension, settings)) {
-      // don't auto-switch files with 'md' language - let them be edited normally
-      const language = getLanguageForFile(view.file.path, settings);
-      if (language === 'md' || language === 'markdown') continue;
+    if (leaf.view instanceof MarkdownView) {
+      const view = leaf.view;
+      if (view.file instanceof TFile && isConfiguredExtension(view.file.extension, settings)) {
+        // don't auto-switch files with 'md' language - let them be edited normally
+        const language = getLanguageForFile(view.file.path, settings);
+        if (language === 'md' || language === 'markdown') continue;
 
-      void view.setState({ mode: "preview" }, { history: false });
+        void view.setState({ mode: "preview" }, { history: false });
+      }
     }
   }
 }

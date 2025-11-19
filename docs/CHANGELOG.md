@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 
+## [0.5.4] - 2025-11-19
+
+### Changed
+- Moved configuration-related files into `config/` directory for cleaner project root.
+- Updated import paths in source code to reflect new configuration file locations.
+
+### Fixed
+- Plugin Review: Scoped plugin CSS to prevent conflicts with core Obsidian styles.
+- Plugin Review: Replaced unsafe type casts with `instanceof` checks for improved stability.
+
 ## [0.5.3] - 2025-11-16
 
 ### Fixed

@@ -42,6 +42,11 @@ class SyntaxHighlightRenderChild extends MarkdownRenderChild {
           this.ctx.sourcePath,
           this
         );
+
+        const pre = this.containerEl.querySelector('pre');
+        if (pre) {
+          pre.classList.add('csh-code-block');
+        }
       } catch (e) {
         console.error('custom-syntax-highlights: reading render failed', e);
       }
