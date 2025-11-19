@@ -1,7 +1,7 @@
 /* --- Obsidian Reading Mode Styles --- */
 /* wrap code blocks in reading view for all supported extensions */
-.markdown-reading-view pre code,
-.markdown-reading-view pre {
+.markdown-reading-view pre.csh-code-block code,
+.markdown-reading-view pre.csh-code-block {
   white-space: pre-wrap !important;
   word-break: break-word;
   overflow-wrap: anywhere;
@@ -28,7 +28,7 @@
 }
 
 /* keep copy button aligned when lines wrap */
-.markdown-reading-view pre {
+.markdown-reading-view pre.csh-code-block {
   position: relative;
 }
 
