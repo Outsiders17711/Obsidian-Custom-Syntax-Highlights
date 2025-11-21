@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+-  Updated installation instructions for Community Plugins in README.md after review approval.
+
 ### Changed
 ### Removed
 ### Fixed
