@@ -32,11 +32,11 @@ An Obsidian plugin that displays files with custom extensions as syntax-highligh
 
 ### From Community Plugins (Recommended)
 You can install the plugin directly from Obsidian's Community Plugins browser:
-1. Open Obsidian and go to **Settings → Community plugins**
+1. Open Obsidian and go to **Settings > Community plugins**
 2. Click on **Browse** and search for "Custom Syntax Highlights"
 3. Click **Install** and then **Enable** the plugin
 
-You can skip the above steps and click [here](obsidian://show-plugin?id=custom-syntax-highlights) to open Obsidian and view the plugin directly. You can also visit the plugin page: [Custom Syntax Highlights on Obsidian](https://obsidian.md/plugins?id=custom-syntax-highlights).
+You can also install the plugin directly from its Community Plugins entry: [Custom Syntax Highlights on Obsidian](https://obsidian.md/plugins?id=custom-syntax-highlights).
 
 ### Manual Installation
 1. Download the latest release from [GitHub Releases](https://github.com/Outsiders17711/Obsidian-Custom-Syntax-Highlights/releases)
